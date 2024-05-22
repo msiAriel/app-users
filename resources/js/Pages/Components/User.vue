@@ -49,9 +49,11 @@ const createModal = () => {
     createAction.value = true;
     editAction.value = false;
     form.clearErrors()
+    form.reset()
 }
 
 const editModal = (user) => {
+    form.reset()
     dialogVisible.value = true;
     editAction.value = true;
     createAction.value = false;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -35,12 +36,13 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'last_name' => 'required',
-            'password' => 'required',
-            'phone' => 'required',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'last_name' => 'required|string|max:255',
+            'password' => 'required|string|min:8', // Es recomendable añadir reglas de longitud mínima para la contraseña
+            'phone' => 'required|string|max:15', // Puedes ajustar el max dependiendo del formato del teléfono
         ]);
+        
 
         try {
             $user = User::create([
@@ -72,10 +74,10 @@ class UsersController extends Controller
     public function update(Request $request, int $id)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
+            'last_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15', // Ajusta el máximo según el formato del teléfono esperado
         ]);
 
         try {
